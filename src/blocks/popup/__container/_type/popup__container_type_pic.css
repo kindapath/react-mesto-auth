@@ -1,0 +1,14 @@
+.popup__container_type_pic {
+  background-color: transparent;
+  min-width: unset;
+  width: min-content;
+  min-height: unset;
+  border-radius: 0;
+  padding: 0;
+}
+
+@media screen and (max-width: 568px) {
+  .popup__container_type_pic {
+    padding: 0;
+  }
+}

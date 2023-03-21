@@ -1,0 +1,24 @@
+.element__remove {
+  background-color: transparent;
+  border: 0;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  padding: 0;
+  width: 18px;
+  height: 19px;
+  transition: opacity .3s;
+  cursor: pointer;
+}
+
+.element__remove:hover {
+  opacity: .6;
+}
+
+.element__remove_visible {
+  visibility: visible;
+}
+
+.element__remove_hidden {
+  visibility: hidden;
+}

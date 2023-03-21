@@ -1,0 +1,12 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 50px 0;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+}
+
+@media screen and (max-width: 568px) {
+  .content {
+    gap: 36px 0;
+  }
+}
