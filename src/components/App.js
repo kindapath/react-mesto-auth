@@ -9,7 +9,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import ProtectedRouteElement from './ProtectedRoute';
@@ -19,6 +19,8 @@ import registerSuccess from './../images/register_success.svg';
 import registerFail from './../images/register_fail.svg';
 
 function App() {
+
+  const navigate = useNavigate()
 
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
@@ -170,21 +172,43 @@ function App() {
       })
   }
 
-  function handleRegister(formValues) {
+  function onRegister(formValues) {
     // setIsLoading(true)
 
     authApi.register(formValues)
-      .then((userData) => {
-        console.log(userData)
+      .then(() => {
         setIsInfoTooltipSuccessOpen(true)
       })
       .catch(err => {
         console.log(err)
         setIsInfoTooltipFailOpen(true)
       })
-      // .finally(() => {
-      //   setIsLoading(false)
-      // })
+    // .finally(() => {
+    //   setIsLoading(false)
+    // })
+  }
+
+  function onLogin(formValues) {
+    // setIsLoading(true)
+    authApi.authorize(formValues)
+      .then((data) => {
+        if (data.token) {
+          handleLogin()
+          navigate('/')
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        setIsInfoTooltipFailOpen(true)
+      })
+    // .finally(() => {
+    //   setIsLoading(false)
+    // })
+  }
+
+  function handleLogin(e) {
+
+    setLoggedIn(true)
   }
 
   function closeAllPopups() {
@@ -269,8 +293,8 @@ function App() {
               onCardDelete={handleCardDelete}
               cards={cards} />
           } />
-          <Route path="/signup" element={<Register onRegister={handleRegister}/>} />
-          <Route path="/signin" element={<Login />} />
+          <Route path="/signup" element={<Register onRegister={onRegister} />} />
+          <Route path="/signin" element={<Login onLogin={onLogin} handleLogin={handleLogin} />} />
 
 
         </Routes>

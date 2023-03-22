@@ -16,7 +16,6 @@ export default function Register({ onRegister }) {
   function handleSubmit(e) {
     e.preventDefault();
     onRegister(values)
-    console.log('submit reg')
   }
 
   return (

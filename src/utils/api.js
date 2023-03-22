@@ -111,19 +111,35 @@ class Api {
       })
     })
       .then((response) => {
-        try {
-          if (response.status === 200) {
-            return response.json();
-          }
-        } catch (e) {
-          return (e)
+        if (response.ok) {
+          return response.json();
+        }
+        return Promise.reject(`Ошибка: ${response.status}`);
+      })
+    // .then(this._checkResponse)
+
+  };
+
+  authorize({ password, email }) {
+    return fetch(`${this._baseUrl}/signin`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        "password": password,
+        "email": email,
+      })
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem('token', data.token)
+          return data
         }
       })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => console.log(err));
-  };
+  }
 }
 
 
