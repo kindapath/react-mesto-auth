@@ -9,7 +9,6 @@
   font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   margin: 0 auto 0 auto;
   padding: 45px 200px 60px 200px;
   min-height: 100vh;

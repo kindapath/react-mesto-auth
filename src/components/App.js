@@ -4,12 +4,19 @@ import Header from "./Header";
 import ImagePopup from "./ImagePopup";
 import Main from "./Main";
 import PopupWithForm from "./PopupWithForm";
-import { api } from "../utils/api"
+import { api, authApi } from "../utils/api"
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import Register from './Register';
+import Login from './Login';
+import ProtectedRouteElement from './ProtectedRoute';
+import InfoTooltip from './InfoTooltip';
 
+import registerSuccess from './../images/register_success.svg';
+import registerFail from './../images/register_fail.svg';
 
 function App() {
 
@@ -17,11 +24,15 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false)
-  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false)
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [isInfoTooltipSuccessOpen, setIsInfoTooltipSuccessOpen] = useState(false);
+  const [isInfoTooltipFailOpen, setIsInfoTooltipFailOpen] = useState(false);
+
 
   const [selectedCard, setSelectedCard] = useState({})
 
-  const [currentUser, setCurrentUser] = useState({})
+  const [currentUser, setCurrentUser] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -159,12 +170,32 @@ function App() {
       })
   }
 
+  function handleRegister(formValues) {
+    // setIsLoading(true)
+
+    authApi.register(formValues)
+      .then((userData) => {
+        console.log(userData)
+        setIsInfoTooltipSuccessOpen(true)
+      })
+      .catch(err => {
+        console.log(err)
+        setIsInfoTooltipFailOpen(true)
+      })
+      // .finally(() => {
+      //   setIsLoading(false)
+      // })
+  }
+
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsConfirmPopupOpen(false);
     setIsImagePopupOpen(false);
+
+    setIsInfoTooltipSuccessOpen(false);
+    setIsInfoTooltipFailOpen(false);
   }
 
   return (
@@ -207,17 +238,46 @@ function App() {
           isOpen={isImagePopupOpen}
           onClose={closeAllPopups} />
 
-        <Main
-          onEditAvatar={handleEditAvatarClick}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          cards={cards}
+        <InfoTooltip
+          name='tool'
+          title='Вы успешно зарегистрировались!'
+          image={registerSuccess}
+          isOpen={isInfoTooltipSuccessOpen}
+          onClose={closeAllPopups}
         />
 
+        <InfoTooltip
+          name='tool'
+          title='Что-то пошло не так!
+          Попробуйте ещё раз.'
+          image={registerFail}
+          isOpen={isInfoTooltipFailOpen}
+          onClose={closeAllPopups}
+        />
+
+        <Routes>
+          <Route path="/" element={
+            <ProtectedRouteElement
+              element={Main}
+              loggedIn={loggedIn}
+
+              onEditAvatar={handleEditAvatarClick}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              cards={cards} />
+          } />
+          <Route path="/signup" element={<Register onRegister={handleRegister}/>} />
+          <Route path="/signin" element={<Login />} />
+
+
+        </Routes>
         <Footer />
+
+
+
       </div>
     </CurrentUserContext.Provider>
   );

@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import Card from "./Card"
-import { CurrentUserContext } from '../contexts/CurrentUserContext'
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+
 
 // Мейн
 
@@ -41,6 +42,7 @@ export default function Main({
             onCardDelete={onCardDelete} />
         })}
       </section>
+
     </main>
   )
 }

@@ -97,7 +97,35 @@ class Api {
 
       .then(this._checkResponse)
   }
+
+  register({ password, email }) {
+    return fetch(`${this._baseUrl}/signup`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "password": password,
+        "email": email
+      })
+    })
+      .then((response) => {
+        try {
+          if (response.status === 200) {
+            return response.json();
+          }
+        } catch (e) {
+          return (e)
+        }
+      })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => console.log(err));
+  };
 }
+
 
 export const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-59',
@@ -105,4 +133,8 @@ export const api = new Api({
     authorization: 'fe2bb06d-e8a5-45a9-845b-99af7f5ece9e',
     'Content-Type': 'application/json'
   },
+});
+
+export const authApi = new Api({
+  baseUrl: 'https://auth.nomoreparties.co',
 });

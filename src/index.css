@@ -32,25 +32,37 @@
 @import url('./blocks/popup/__container/_type/popup__container_type_pic.css');
 @import url('./blocks/popup/__container/_type/popup__container_type_confirm.css');
 @import url('./blocks/popup/__container/_type/popup__container_type_avatar.css');
+@import url('./blocks/popup/__container/_type/popup__container_type_tool.css');
 @import url('./blocks/popup/__form/popup__form.css');
+
 @import url('./blocks/popup/__image/popup__image.css');
+@import url('./blocks/popup/__image/_type/popup__image_type_tool.css');
+
 
 @import url('./blocks/popup/__input/popup__input.css');
 @import url('./blocks/popup/__input/_type/popup__input_type_error.css');
+@import url('./blocks/popup/__input/_type/popup__input_type_login.css');
+
 
 @import url('./blocks/popup/__input-error/popup__input-error.css');
 @import url('./blocks/popup/__input-error/_active/popup__input-error_active.css');
 
 @import url('./blocks/popup/__submit/popup__submit.css');
 @import url('./blocks/popup/__submit/_disabled/popup__submit_disabled.css');
+@import url('./blocks/popup/__submit/_type/popup__submit_type_login.css');
+
 @import url('./blocks/popup/__text/popup__text.css');
 @import url('./blocks/popup/__text/_type/popup__text_type_pic.css');
 @import url('./blocks/popup/__text/_type/popup__text_type_confirm.css');
+@import url('./blocks/popup/__text/_type/popup__text_type_tool.css');
+
+
 @import url('./blocks/popup/__close/popup__close.css');
 @import url('./blocks/popup/__close-image/popup__close-image.css');
 
 @import url('./blocks/popup/__input-error/popup__input-error.css');
 @import url('./blocks/popup/__input-error/_active/popup__input-error_active.css');
+
 
 /* block elements */
 @import url('./blocks/elements/elements.css');
@@ -66,6 +78,13 @@
 @import url('./blocks/element/__like/_active/element__like_active.css');
 @import url('./blocks/element/__remove/element__remove.css');
 @import url('./blocks/element/__remove-image/element__remove-image.css');
+
+/* block login */
+@import url('./blocks/login/login.css');
+@import url('./blocks/login/__title/login__title.css');
+@import url('./blocks/login/__text/login__text.css');
+
+
 
 /* block footer */
 @import url('./blocks/footer/footer.css');
