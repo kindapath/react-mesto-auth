@@ -52,7 +52,7 @@ export default function Register({ onRegister }) {
           <button className={`popup__submit ${formValid ? "" : "popup__submit_disabled"} popup__submit_type_login`} disabled={formValid ? "" : true} type="submit">Зарегистрироваться</button>
         </form>
 
-        <p className="login__text">Уже зарегистрированы? <Link className="login__text" to="/signin">Войти</Link></p>
+        <p className="login__text">Уже зарегистрированы? <Link className="login__link" to="/signin">Войти</Link></p>
       </section>
     </main>
   )

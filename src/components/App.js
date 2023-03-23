@@ -9,7 +9,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import ProtectedRouteElement from './ProtectedRoute';
@@ -35,6 +35,7 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
+  const [email, setEmail] = useState('')
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -53,6 +54,26 @@ function App() {
       }
     }
   }, [isOpen])
+
+  useEffect(() => {
+    tokenCheck()
+  }, [loggedIn])
+
+  function tokenCheck() {
+    if (localStorage.getItem('token')) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        authApi.getContent(token)
+          .then((res) => {
+            if (res) {
+              setEmail(res.data.email)
+              handleLogin();
+              navigate('/')
+            }
+          })
+      }
+    }
+  }
 
   // Стейты
   const [cards, setCards] = useState([])
@@ -173,23 +194,20 @@ function App() {
   }
 
   function onRegister(formValues) {
-    // setIsLoading(true)
 
     authApi.register(formValues)
       .then(() => {
         setIsInfoTooltipSuccessOpen(true)
+        navigate('/signin')
       })
       .catch(err => {
         console.log(err)
         setIsInfoTooltipFailOpen(true)
       })
-    // .finally(() => {
-    //   setIsLoading(false)
-    // })
   }
 
   function onLogin(formValues) {
-    // setIsLoading(true)
+
     authApi.authorize(formValues)
       .then((data) => {
         if (data.token) {
@@ -201,14 +219,14 @@ function App() {
         console.log(err)
         setIsInfoTooltipFailOpen(true)
       })
-    // .finally(() => {
-    //   setIsLoading(false)
-    // })
   }
 
-  function handleLogin(e) {
-
+  function handleLogin() {
     setLoggedIn(true)
+  }
+
+  function handleSignout() {
+    setLoggedIn(false)
   }
 
   function closeAllPopups() {
@@ -226,7 +244,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
 
-        <Header />
+        <Header loggedIn={loggedIn} email={email} handleSignout={handleSignout} />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
