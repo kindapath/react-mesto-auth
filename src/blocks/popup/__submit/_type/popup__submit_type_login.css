@@ -4,3 +4,10 @@
 
   margin-top: 170px;
 }
+
+@media screen and (max-width: 568px) {
+  .popup__submit_type_login {
+    margin-top: 125px
+  }
+
+}

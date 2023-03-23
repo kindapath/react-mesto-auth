@@ -1,5 +1,5 @@
 
-
+// Register.js
 import { Link } from "react-router-dom";
 import useValidation from "../hooks/useValidation";
 
@@ -10,7 +10,6 @@ export default function Register({ onRegister }) {
     error,
     onChange,
     formValid,
-    resetValidation
   } = useValidation();
 
   function handleSubmit(e) {

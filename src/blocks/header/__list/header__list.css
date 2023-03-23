@@ -7,3 +7,11 @@
   gap: 0 24px;
   list-style: none;
 }
+
+@media screen and (max-width: 568px) {
+  .header__list {
+    flex-direction: column;
+
+    align-items: center;
+  }
+}

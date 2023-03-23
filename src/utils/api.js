@@ -98,6 +98,8 @@ class Api {
       .then(this._checkResponse)
   }
 
+  // Регистрация
+
   register({ password, email }) {
     return fetch(`${this._baseUrl}/signup`, {
       method: 'POST',
@@ -120,6 +122,7 @@ class Api {
 
   };
 
+  // Авторизация
   authorize({ password, email }) {
     return fetch(`${this._baseUrl}/signin`, {
       method: 'POST',
@@ -141,6 +144,7 @@ class Api {
       })
   }
 
+  // Получаем контект о юзере
   getContent(token) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'GET',
@@ -164,6 +168,7 @@ export const api = new Api({
   },
 });
 
+// Экземпляр с аутентификацией
 export const authApi = new Api({
   baseUrl: 'https://auth.nomoreparties.co',
 });

@@ -19,9 +19,10 @@ import registerSuccess from './../images/register_success.svg';
 import registerFail from './../images/register_fail.svg';
 
 function App() {
-
+  // Навигация
   const navigate = useNavigate()
 
+  // Стейты попапов
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
@@ -33,31 +34,24 @@ function App() {
 
   const [selectedCard, setSelectedCard] = useState({})
 
+  // Стейты данных юзера
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState('')
 
+  // Стейт загрузки
   const [isLoading, setIsLoading] = useState(false);
 
+  // Проверяем открыт ли какой-либо из попапов
   const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isImagePopupOpen
 
-  useEffect(() => {
-    function closeByEscape(evt) {
-      if (evt.key === 'Escape') {
-        closeAllPopups();
-      }
-    }
-    if (isOpen) { // навешиваем только при открытии
-      document.addEventListener('keydown', closeByEscape);
-      return () => {
-        document.removeEventListener('keydown', closeByEscape);
-      }
-    }
-  }, [isOpen])
 
+  // При монтировании и смене стейта логина проверится токен
   useEffect(() => {
     tokenCheck()
   }, [loggedIn])
+
+  // Проверяем токен
 
   function tokenCheck() {
     if (localStorage.getItem('token')) {
@@ -66,7 +60,10 @@ function App() {
         authApi.getContent(token)
           .then((res) => {
             if (res) {
+              // Записываем почту, пришедшую с сервера
               setEmail(res.data.email)
+
+              // Логинимся и перенаправляем юзера на домашнюю страницу
               handleLogin();
               navigate('/')
             }
@@ -137,22 +134,32 @@ function App() {
       .catch(err => console.log(err))
   }, [])
 
+  // Открываем аватар редактирования аватара
+
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true)
   }
+
+  // Открываем попап редактирования профиля
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true)
   }
 
+  // Открываем попап с добавлением карточки
+
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true)
   }
+
+  // Кликаем на карточку
 
   function handleCardClick(card) {
     setIsImagePopupOpen(true)
     setSelectedCard(card)
   }
+
+  // Обновляем аватар
 
   function handleUpdateUser(name, about) {
     setIsLoading(true)
@@ -167,6 +174,7 @@ function App() {
       })
   }
 
+  // Обновляем аватар
   function handleUpdateAvatar(avatar) {
     setIsLoading(true)
     api.updateAvatar(avatar)
@@ -180,6 +188,7 @@ function App() {
       })
   }
 
+  // Сабмитим добавление карточки
   function handleAddPlaceSubmit(name, link) {
     setIsLoading(true)
     api.addCard(name, link)
@@ -193,6 +202,7 @@ function App() {
       })
   }
 
+  // Регистрируемся
   function onRegister(formValues) {
 
     authApi.register(formValues)
@@ -206,6 +216,7 @@ function App() {
       })
   }
 
+  // Логинимся
   function onLogin(formValues) {
 
     authApi.authorize(formValues)
@@ -221,14 +232,18 @@ function App() {
       })
   }
 
+  // Меняем состояние логина на тру
   function handleLogin() {
     setLoggedIn(true)
   }
 
+  // Выходим из аккаунта
+  // Меняем состояние логина на фолс
   function handleSignout() {
     setLoggedIn(false)
   }
 
+  // Закрываем попапы
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
@@ -240,9 +255,25 @@ function App() {
     setIsInfoTooltipFailOpen(false);
   }
 
+  // Закрываем попапы на ESC
+  useEffect(() => {
+    function closeByEscape(evt) {
+      if (evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    if (isOpen) { // навешиваем только при открытии
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+    }
+  }, [isOpen])
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
+
 
         <Header loggedIn={loggedIn} email={email} handleSignout={handleSignout} />
 
@@ -311,6 +342,7 @@ function App() {
               onCardDelete={handleCardDelete}
               cards={cards} />
           } />
+
           <Route path="/signup" element={<Register onRegister={onRegister} />} />
           <Route path="/signin" element={<Login onLogin={onLogin} handleLogin={handleLogin} />} />
 

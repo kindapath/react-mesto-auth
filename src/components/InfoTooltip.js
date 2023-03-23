@@ -1,4 +1,4 @@
-
+//InfoTooltip.js
 import closeImage from '../images/popup__close-icon.svg'
 
 export default function InfoTooltip({ name, title, image, onClose, isOpen }) {
