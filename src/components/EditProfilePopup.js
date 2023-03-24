@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
 import useValidation from "../hooks/useValidation";
+import Input from "./Input";
 
 export default function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
 
@@ -43,31 +44,36 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoad
       formValid={formValid}
     >
 
-      <input
+      <Input
         className="popup__input popup__input_field_name"
         name="name"
         type="text"
-        id="name-input"
         placeholder="Имя"
-        required minLength={2}
-        maxLength={40}
-        autoFocus
         value={values.name || ''}
         onChange={onChange}
-      />
-      <span className={`popup__input-error ${formValid ? '' : 'popup__input-error_active'}  name-input-error`}>{error.name}</span>
+        formValid={formValid}
+        errorText={error.name}
 
-      <input className="popup__input popup__input_field_job"
+        required
+        minLength={2}
+        maxLength={40}
+        autoFocus
+      />
+
+
+      <Input className="popup__input popup__input_field_job"
         name="about"
         type="text"
-        id="job-input"
         placeholder="Описание"
-        required minLength={2}
-        maxLength={200}
         value={values.about || ''}
+        formValid={formValid}
+        errorText={error.about}
         onChange={onChange}
+
+        required
+        minLength={2}
+        maxLength={200}
       />
-      <span className={`popup__input-error ${formValid ? '' : 'popup__input-error_active'}  job-input-error`}>{error.about}</span>
 
     </PopupWithForm>
   )

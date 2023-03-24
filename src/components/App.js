@@ -4,7 +4,8 @@ import Header from "./Header";
 import ImagePopup from "./ImagePopup";
 import Main from "./Main";
 import PopupWithForm from "./PopupWithForm";
-import { api, authApi } from "../utils/api"
+import { api } from "../utils/api";
+import { auth } from "../utils/auth";
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -42,14 +43,11 @@ function App() {
   // Стейт загрузки
   const [isLoading, setIsLoading] = useState(false);
 
+  // Стейт карточек
+  const [cards, setCards] = useState([])
+
   // Проверяем открыт ли какой-либо из попапов
   const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isImagePopupOpen
-
-
-  // При монтировании и смене стейта логина проверится токен
-  useEffect(() => {
-    tokenCheck()
-  }, [loggedIn])
 
   // Проверяем токен
 
@@ -57,7 +55,7 @@ function App() {
     if (localStorage.getItem('token')) {
       const token = localStorage.getItem('token');
       if (token) {
-        authApi.getContent(token)
+        auth.getContent(token)
           .then((res) => {
             if (res) {
               // Записываем почту, пришедшую с сервера
@@ -68,23 +66,10 @@ function App() {
               navigate('/')
             }
           })
+          .catch(err => console.log(err))
       }
     }
   }
-
-  // Стейты
-  const [cards, setCards] = useState([])
-
-  useEffect(() => {
-    // Получаем изначальную информацию с сервера
-    api.getInitialCards()
-      .then((cardsData) => {
-
-        // Получаем массив карточек
-        setCards(cardsData)
-      })
-      .catch(err => console.log(err))
-  }, [])
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -122,17 +107,6 @@ function App() {
       })
       .catch(err => console.log(err))
   }
-
-  useEffect(() => {
-    // Получаем изначальную информацию с сервера
-    api.getUserInfo()
-      .then((userData) => {
-
-        // Получаем информацию профиля с сервера
-        setCurrentUser(userData)
-      })
-      .catch(err => console.log(err))
-  }, [])
 
   // Открываем аватар редактирования аватара
 
@@ -202,10 +176,21 @@ function App() {
       })
   }
 
+  // Меняем состояние логина на тру
+  function handleLogin() {
+    setLoggedIn(true)
+  }
+
+  // Выходим из аккаунта
+  // Меняем состояние логина на фолс
+  function handleSignout() {
+    setLoggedIn(false)
+  }
+
   // Регистрируемся
   function onRegister(formValues) {
 
-    authApi.register(formValues)
+    auth.register(formValues)
       .then(() => {
         setIsInfoTooltipSuccessOpen(true)
         navigate('/signin')
@@ -219,7 +204,7 @@ function App() {
   // Логинимся
   function onLogin(formValues) {
 
-    authApi.authorize(formValues)
+    auth.authorize(formValues)
       .then((data) => {
         if (data.token) {
           handleLogin()
@@ -230,17 +215,6 @@ function App() {
         console.log(err)
         setIsInfoTooltipFailOpen(true)
       })
-  }
-
-  // Меняем состояние логина на тру
-  function handleLogin() {
-    setLoggedIn(true)
-  }
-
-  // Выходим из аккаунта
-  // Меняем состояние логина на фолс
-  function handleSignout() {
-    setLoggedIn(false)
   }
 
   // Закрываем попапы
@@ -254,6 +228,37 @@ function App() {
     setIsInfoTooltipSuccessOpen(false);
     setIsInfoTooltipFailOpen(false);
   }
+
+  // При монтировании записываем данные в стейт карточек
+
+  useEffect(() => {
+    // Получаем изначальную информацию с сервера
+    api.getInitialCards()
+      .then((cardsData) => {
+
+        // Получаем массив карточек
+        setCards(cardsData)
+      })
+      .catch(err => console.log(err))
+  }, [])
+
+  // При монтировании записываем данные в стейт текущего юзера
+
+  useEffect(() => {
+    // Получаем изначальную информацию с сервера
+    api.getUserInfo()
+      .then((userData) => {
+
+        // Получаем информацию профиля с сервера
+        setCurrentUser(userData)
+      })
+      .catch(err => console.log(err))
+  }, [])
+
+  // При монтировании и смене стейта логина проверится токен
+  useEffect(() => {
+    tokenCheck()
+  }, [loggedIn])
 
   // Закрываем попапы на ESC
   useEffect(() => {
@@ -309,7 +314,9 @@ function App() {
         <ImagePopup
           card={selectedCard}
           isOpen={isImagePopupOpen}
-          onClose={closeAllPopups} />
+          onClose={closeAllPopups}
+          name="pic"
+          />
 
         <InfoTooltip
           name='tool'
