@@ -101,10 +101,8 @@ class Api {
 
 
 export const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-59',
-  headers: {
-    authorization: 'fe2bb06d-e8a5-45a9-845b-99af7f5ece9e',
-    'Content-Type': 'application/json'
-  },
+  // baseUrl: 'https://api.kindaboii.nomoredomains.monster',
+  baseUrl: 'http://localhost:8000',
+  credentials: 'include'
 });
 

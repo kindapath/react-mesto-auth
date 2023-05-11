@@ -206,7 +206,8 @@ function App() {
 
     auth.authorize(formValues)
       .then((data) => {
-        if (data.token) {
+        console.log(data)
+        if (data.email) {
           handleLogin()
           navigate('/')
         }
@@ -316,7 +317,7 @@ function App() {
           isOpen={isImagePopupOpen}
           onClose={closeAllPopups}
           name="pic"
-          />
+        />
 
         <InfoTooltip
           name='tool'

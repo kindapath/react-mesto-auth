@@ -47,12 +47,13 @@ class Auth {
       })
     })
       .then(this._checkResponse)
-      .then((data) => {
-        if (data.token) {
-          localStorage.setItem('token', data.token)
-          return data
-        }
-      })
+    // .then((data) => {
+    //   console.log(data)
+    //   if (data.token) {
+    //     localStorage.setItem('token', data.token)
+    //     return data
+    //   }
+    // })
   }
 
   // Получаем контект о юзере
@@ -72,5 +73,7 @@ class Auth {
 
 // Экземпляр с аутентификацией
 export const auth = new Auth({
-  baseUrl: 'https://auth.nomoreparties.co',
+  // baseUrl: 'https://api.kindaboii.nomoredomains.monster',
+  baseUrl: 'http://localhost:8000',
+  credentials: 'include'
 });
